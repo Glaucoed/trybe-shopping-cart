@@ -5,9 +5,10 @@ const fetchProducts = (item) => {
   }
   // const response = await fetch(API_URL);
   // const products = await response.json();
-  return (fetch(API_URL)
-  .then((response)=> response.json()))
-  .then((products)=> products);
+  const data = (fetch(API_URL)
+  .then((response) => response.json()))
+  .then((products) => products);
+  return data;
 };
 if (typeof module !== 'undefined') {
   module.exports = {
