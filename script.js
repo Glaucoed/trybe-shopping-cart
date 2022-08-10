@@ -1,6 +1,7 @@
 const items = document.querySelector('.items');
 const cartItems = document.querySelector('.cart__items');
 const favoritesButton = document.getElementsByClassName('item__add');
+const carrinhoDeCompras = [];
 
 const createProductImageElement = (imageSource) => {
   const img = document.createElement('img');
@@ -16,6 +17,7 @@ const createCustomElement = (element, className, innerText) => {
   return e;
 };
 
+// Crias todos os section com cada item de demonstração
 const createProductItemElement = ({ sku, name, image }) => {
   const section = document.createElement('section');
   section.className = 'item';
@@ -31,8 +33,11 @@ const createProductItemElement = ({ sku, name, image }) => {
 const getSkuFromProductItem = (item) =>
   item.querySelector('span.item__sku').innerText;
 
-const cartItemClickListener = (event) => {};
+const cartItemClickListener = (event) => {
+  event.target.remove();
+};
 
+// cria a LI com as informações dentro do Carrinho de compras
 const createCartItemElement = ({ sku, name, salePrice }) => {
   const li = document.createElement('li');
   li.className = 'cart__item';
@@ -41,17 +46,22 @@ const createCartItemElement = ({ sku, name, salePrice }) => {
   return li;
 };
 
-const returnItem = async (getId) => {
-  const dataItem = await fetchItem(getId);
+// funcao carinho de compras
+const shoppingCartItem = async (recebeId) => { 
+  const dataItem = await fetchItem(recebeId);
   const { id: sku, title: name, price: salePrice } = dataItem;
   cartItems.appendChild(createCartItemElement({ sku, name, salePrice }));
+  carrinhoDeCompras.push({ sku, name, salePrice });
+  console.log(carrinhoDeCompras);
 };
 
+// pega o Id do HTML
 const getId = (event) => {
   const adicionaItemsCard = event.target.parentNode.firstChild.innerText;
-  returnItem(adicionaItemsCard);
+  shoppingCartItem(adicionaItemsCard);
 };
 
+// Renderiza os items no shopping
 const renderItens = async () => {
   const dataComplete = await fetchProducts('computador');
   const { results } = dataComplete;
