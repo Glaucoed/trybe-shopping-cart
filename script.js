@@ -41,7 +41,7 @@ const cartItemClickListener = (event) => {
   const elementIndex = shoppingCartArray.findIndex(
     (id) => id.sku === idClicked,
   );
-  console.log(elementIndex)
+  console.log(elementIndex);
   shoppingCartArray = shoppingCartArray.filter(
     (_, index) => index !== elementIndex,
   );
