@@ -62,6 +62,7 @@ const shoppingCartItem = async (receiveId) => {
   const { id: sku, title: name, price: salePrice } = dataItem;
   cartItems.appendChild(createCartItemElement({ sku, name, salePrice }));
   shoppingCartArray.push({ sku, name, salePrice }); // ---------------------> pegando um objeto e adicionando em um Array
+  // cartItems.appendChild(createCartItemElement(shoppingCartArray.in)) // Falta ajustar
   console.log(shoppingCartArray); // mostrando o que está sendo inserido na array
 };
 
