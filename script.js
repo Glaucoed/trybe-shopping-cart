@@ -1,7 +1,7 @@
 const items = document.querySelector('.items');
 const cartItems = document.querySelector('.cart__items');
 const favoritesButton = document.getElementsByClassName('item__add');
-const carrinhoDeCompras = [];
+let carrinhoDeCompras = [];
 
 const createProductImageElement = (imageSource) => {
   const img = document.createElement('img');
@@ -35,6 +35,10 @@ const getSkuFromProductItem = (item) =>
 
 const cartItemClickListener = (event) => {
   event.target.remove();
+  const idClicado = event.target.innerText.slice(5, 18);
+  const elementIndex = carrinhoDeCompras.findIndex((id) => id.sku === idClicado);
+  carrinhoDeCompras = carrinhoDeCompras.filter((_, index) => index !== elementIndex);
+  console.log(carrinhoDeCompras);
 };
 
 // cria a LI com as informações dentro do Carrinho de compras
@@ -52,7 +56,7 @@ const shoppingCartItem = async (recebeId) => {
   const { id: sku, title: name, price: salePrice } = dataItem;
   cartItems.appendChild(createCartItemElement({ sku, name, salePrice }));
   carrinhoDeCompras.push({ sku, name, salePrice });
-  console.log(carrinhoDeCompras);
+  console.log(carrinhoDeCompras); // mostrando o que está sendo inserido na array
 };
 
 // pega o Id do HTML
