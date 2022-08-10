@@ -1,7 +1,7 @@
 const items = document.querySelector('.items');
 const cartItems = document.querySelector('.cart__items');
-const favoritesButton = document.getElementsByClassName('item__add');
-let carrinhoDeCompras = [];
+const addToCart = document.getElementsByClassName('item__add');
+let shoppingCartArray = [];
 
 const createProductImageElement = (imageSource) => {
   const img = document.createElement('img');
@@ -25,7 +25,9 @@ const createProductItemElement = ({ sku, name, image }) => {
   section.appendChild(createCustomElement('span', 'item__sku', sku));
   section.appendChild(createCustomElement('span', 'item__title', name));
   section.appendChild(createProductImageElement(image));
-  section.appendChild(createCustomElement('button', 'item__add', 'Adicionar ao carrinho!'));
+  section.appendChild(
+    createCustomElement('button', 'item__add', 'Adicionar ao carrinho!'),
+  );
 
   return section;
 };
@@ -34,11 +36,15 @@ const getSkuFromProductItem = (item) =>
   item.querySelector('span.item__sku').innerText;
 
 const cartItemClickListener = (event) => {
-  event.target.remove();
-  const idClicado = event.target.innerText.slice(5, 18);
-  const elementIndex = carrinhoDeCompras.findIndex((id) => id.sku === idClicado);
-  carrinhoDeCompras = carrinhoDeCompras.filter((_, index) => index !== elementIndex);
-  console.log(carrinhoDeCompras);
+  event.target.remove(); // remove os elementos html
+  const idClicked = event.target.innerText.slice(5, 18);
+  const elementIndex = shoppingCartArray.findIndex(
+    (id) => id.sku === idClicked,
+  );
+  shoppingCartArray = shoppingCartArray.filter(
+    (_, index) => index !== elementIndex,
+  );
+  console.log(shoppingCartArray);
 };
 
 // cria a LI com as informações dentro do Carrinho de compras
@@ -50,33 +56,33 @@ const createCartItemElement = ({ sku, name, salePrice }) => {
   return li;
 };
 
-// funcao carinho de compras
-const shoppingCartItem = async (recebeId) => { 
-  const dataItem = await fetchItem(recebeId);
+// Recebeu o id enviado pela função gettingId, na linha 71
+const shoppingCartItem = async (receiveId) => {
+  const dataItem = await fetchItem(receiveId);
   const { id: sku, title: name, price: salePrice } = dataItem;
   cartItems.appendChild(createCartItemElement({ sku, name, salePrice }));
-  carrinhoDeCompras.push({ sku, name, salePrice });
-  console.log(carrinhoDeCompras); // mostrando o que está sendo inserido na array
+  shoppingCartArray.push({ sku, name, salePrice }); // ---------------------> pegando um objeto e adicionando em um Array
+  console.log(shoppingCartArray); // mostrando o que está sendo inserido na array
 };
 
-// pega o Id do HTML
-const getId = (event) => {
-  const adicionaItemsCard = event.target.parentNode.firstChild.innerText;
-  shoppingCartItem(adicionaItemsCard);
+// pegando o ID da do item que foi adicionado no MeuCarrinho e passando o id para a função shoppingCartItem
+const gettingId = (event) => {
+  const addCardItems = event.target.parentNode.firstChild.innerText;
+  shoppingCartItem(addCardItems);
 };
 
-// Renderiza os items no shopping
-const renderItens = async () => {
-  const dataComplete = await fetchProducts('computador');
+// Renderiza os itens que do shopping
+const renderItens = async (item) => {
+  const dataComplete = await fetchProducts(item);
   const { results } = dataComplete;
   results.forEach(({ id: sku, title: name, thumbnail: image }) => {
     items.appendChild(createProductItemElement({ sku, image, name }));
   });
   results.forEach((__, index) => {
-    favoritesButton[index].addEventListener('click', getId);
+    addToCart[index].addEventListener('click', gettingId);
   });
 };
 
 window.onload = () => {
-  renderItens();
+  renderItens('computador');
 };
