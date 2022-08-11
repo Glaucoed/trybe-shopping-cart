@@ -37,7 +37,10 @@ const getSkuFromProductItem = (item) =>
 
 const addValue = () => {
   const resultTotal = document.querySelector('.total-price');
-  const valueTotal = shoppingCartArray.reduce((acc, number) => number.salePrice + acc, 0);
+  const valueTotal = shoppingCartArray.reduce(
+    (acc, number) => number.salePrice + acc,
+    0,
+  );
   resultTotal.innerText = valueTotal;
   return resultTotal;
 };
@@ -104,9 +107,11 @@ const renderItens = async (item) => {
 };
 
 buttomEmpy.addEventListener('click', () => {
+  const paragrafoTotal = document.querySelector('.total-price');
   cartItems.innerHTML = '';
   shoppingCartArray = [];
   localStorage.clear();
+  paragrafoTotal.innerText = '0';
 });
 
 window.onload = () => {
