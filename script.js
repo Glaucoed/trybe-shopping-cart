@@ -32,8 +32,7 @@ const createProductItemElement = ({ sku, name, image }) => {
   return section;
 };
 
-const getSkuFromProductItem = (item) =>
-  item.querySelector('span.item__sku').innerText;
+// const getSkuFromProductItem = (item) =>item.querySelector('span.item__sku').innerText;
 
 const addValue = () => {
   const resultTotal = document.querySelector('.total-price');
@@ -42,6 +41,7 @@ const addValue = () => {
     0,
   );
   resultTotal.innerText = valueTotal;
+  console.log(resultTotal);
   return resultTotal;
 };
 
@@ -94,10 +94,23 @@ const gettingId = (event) => {
   shoppingCartItem(addCardItems);
 };
 
+const textLoading = () => {
+  const localItem = document.querySelector('.items');
+  const createSection = document.createElement('section');
+  createSection.className = 'loading';
+  createSection.innerText = 'carregando';
+  localItem.appendChild(createSection);
+};
+const loadingRemove = () => {
+  const loading = document.querySelector('.loading').remove();
+  return loading;
+};
+
 // Renderiza os itens que do shopping
 const renderItens = async (item) => {
   const dataComplete = await fetchProducts(item);
   const { results } = dataComplete;
+  loadingRemove();
   results.forEach(({ id: sku, title: name, thumbnail: image }) => {
     items.appendChild(createProductItemElement({ sku, image, name }));
   });
@@ -114,8 +127,13 @@ buttomEmpy.addEventListener('click', () => {
   paragrafoTotal.innerText = '0';
 });
 
-window.onload = () => {
+const gerenciaLoading = () => {
+  textLoading();
   renderItens('computador');
+};
+
+window.onload = () => {
+  gerenciaLoading();
   shoppingCartArray = getSavedCartItems('cartItems') || [];
   // console.log(shoppingCartArray);/
   renderShoppingCartItem();
