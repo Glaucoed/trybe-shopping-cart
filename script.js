@@ -51,15 +51,18 @@ const createCartItemElement = ({ sku, name, salePrice }) => {
   return li;
 };
 
+const renderShoppingCartItem = () => {
+  cartItems.innerHTML = '';
+  shoppingCartArray.forEach((element) => cartItems.appendChild(createCartItemElement(element))); 
+};
+
 // Recebeu o id enviado pela função gettingId, na linha 71
 const shoppingCartItem = async (receiveId) => {
   const dataItem = await fetchItem(receiveId);
   const { id: sku, title: name, price: salePrice } = dataItem;
-  cartItems.appendChild(createCartItemElement({ sku, name, salePrice }));
-  shoppingCartArray.push({ sku, name, salePrice }); // ---------------------> pegando um objeto e adicionando em um Array
-  saveCartItems(cartItems.innerHTML); // --------------> salvando arquivos no local storage
-  // cartItems.appendChild(createCartItemElement(shoppingCartArray.in)) // Falta ajustar
-  console.log(shoppingCartArray); // mostrando o que está sendo inserido na array
+  shoppingCartArray.push({ sku, name, salePrice }); 
+  renderShoppingCartItem();
+  saveCartItems(shoppingCartArray); // salvando local storage
 };
 
 // pegando o ID da do item que foi adicionado no MeuCarrinho e passando o id para a função shoppingCartItem
@@ -88,7 +91,7 @@ buttomEmpy.addEventListener('click', () => {
 
 window.onload = () => {
   renderItens('computador');
-  // cartItems.innerHTML = localStorage.getItem('cartItems');
-  const x = getSavedCartItems();
-  console.log(x);
+  shoppingCartArray = getSavedCartItems('cartItems') || [];
+  console.log(shoppingCartArray);
+  renderShoppingCartItem();
 };
