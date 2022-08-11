@@ -35,11 +35,24 @@ const createProductItemElement = ({ sku, name, image }) => {
 const getSkuFromProductItem = (item) =>
   item.querySelector('span.item__sku').innerText;
 
+const addValue = () => {
+  const resultTotal = document.querySelector('.total-price');
+  const valueTotal = shoppingCartArray.reduce((acc, number) => number.salePrice + acc, 0);
+  resultTotal.innerText = valueTotal;
+  return resultTotal;
+};
+
 const cartItemClickListener = (event) => {
   event.target.remove(); // remove os elementos html
   const idClicked = event.target.innerText.slice(5, 18);
-  const elementIndex = shoppingCartArray.findIndex((id) => id.sku === idClicked);
-  shoppingCartArray = shoppingCartArray.filter((_, index) => index !== elementIndex);
+  const elementIndex = shoppingCartArray.findIndex(
+    (id) => id.sku === idClicked,
+  );
+  shoppingCartArray = shoppingCartArray.filter(
+    (_, index) => index !== elementIndex,
+  );
+  saveCartItems(shoppingCartArray);
+  shoppingCartArray.reduce((acc, number) => number.salePrice - acc, addValue());
 };
 
 // cria a LI com as informações dentro do Carrinho de compras
@@ -53,15 +66,22 @@ const createCartItemElement = ({ sku, name, salePrice }) => {
 
 const renderShoppingCartItem = () => {
   cartItems.innerHTML = '';
-  shoppingCartArray.forEach((element) => cartItems.appendChild(createCartItemElement(element))); 
+  shoppingCartArray.forEach((element) =>
+    cartItems.appendChild(createCartItemElement(element)));
+};
+
+const creatElementTotal = () => {
+  const cart = document.querySelector('.cart');
+  cart.appendChild(createCustomElement('p', 'total-price', ''));
 };
 
 // Recebeu o id enviado pela função gettingId, na linha 71
 const shoppingCartItem = async (receiveId) => {
   const dataItem = await fetchItem(receiveId);
   const { id: sku, title: name, price: salePrice } = dataItem;
-  shoppingCartArray.push({ sku, name, salePrice }); 
+  shoppingCartArray.push({ sku, name, salePrice });
   renderShoppingCartItem();
+  addValue();
   saveCartItems(shoppingCartArray); // salvando local storage
 };
 
@@ -92,6 +112,7 @@ buttomEmpy.addEventListener('click', () => {
 window.onload = () => {
   renderItens('computador');
   shoppingCartArray = getSavedCartItems('cartItems') || [];
-  console.log(shoppingCartArray);
+  // console.log(shoppingCartArray);
   renderShoppingCartItem();
+  creatElementTotal();
 };
