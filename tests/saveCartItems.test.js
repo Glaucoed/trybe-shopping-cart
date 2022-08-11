@@ -13,7 +13,4 @@ describe('3 - Teste a função saveCartItems', () => {
     saveCartItems('<ol><li>Item</li></ol>');
     expect(localStorage.setItem('cartItems', saveCartItems )).toHaveBeenCalled();
   });
-  it('Teste se, ao chamar a função fetchItem sem argumento, retorna um erro', () => {
-    expect(saveCartItems()).toThrow();
-    });
 });

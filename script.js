@@ -1,6 +1,7 @@
 const items = document.querySelector('.items');
 const cartItems = document.querySelector('.cart__items');
 const addToCart = document.getElementsByClassName('item__add');
+const buttomEmpy = document.querySelector('.empty-cart');
 let shoppingCartArray = [];
 
 const createProductImageElement = (imageSource) => {
@@ -21,7 +22,6 @@ const createCustomElement = (element, className, innerText) => {
 const createProductItemElement = ({ sku, name, image }) => {
   const section = document.createElement('section');
   section.className = 'item';
-
   section.appendChild(createCustomElement('span', 'item__sku', sku));
   section.appendChild(createCustomElement('span', 'item__title', name));
   section.appendChild(createProductImageElement(image));
@@ -38,14 +38,8 @@ const getSkuFromProductItem = (item) =>
 const cartItemClickListener = (event) => {
   event.target.remove(); // remove os elementos html
   const idClicked = event.target.innerText.slice(5, 18);
-  const elementIndex = shoppingCartArray.findIndex(
-    (id) => id.sku === idClicked,
-  );
-  console.log(elementIndex);
-  shoppingCartArray = shoppingCartArray.filter(
-    (_, index) => index !== elementIndex,
-  );
-  console.log(shoppingCartArray);
+  const elementIndex = shoppingCartArray.findIndex((id) => id.sku === idClicked);
+  shoppingCartArray = shoppingCartArray.filter((_, index) => index !== elementIndex);
 };
 
 // cria a LI com as informações dentro do Carrinho de compras
@@ -63,6 +57,7 @@ const shoppingCartItem = async (receiveId) => {
   const { id: sku, title: name, price: salePrice } = dataItem;
   cartItems.appendChild(createCartItemElement({ sku, name, salePrice }));
   shoppingCartArray.push({ sku, name, salePrice }); // ---------------------> pegando um objeto e adicionando em um Array
+  saveCartItems(cartItems.innerHTML); // --------------> salvando arquivos no local storage
   // cartItems.appendChild(createCartItemElement(shoppingCartArray.in)) // Falta ajustar
   console.log(shoppingCartArray); // mostrando o que está sendo inserido na array
 };
@@ -85,6 +80,15 @@ const renderItens = async (item) => {
   });
 };
 
+buttomEmpy.addEventListener('click', () => {
+  cartItems.innerHTML = '';
+  shoppingCartArray = [];
+  localStorage.clear();
+});
+
 window.onload = () => {
   renderItens('computador');
+  // cartItems.innerHTML = localStorage.getItem('cartItems');
+  const x = getSavedCartItems();
+  console.log(x);
 };
