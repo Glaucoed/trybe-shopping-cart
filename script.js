@@ -117,7 +117,7 @@ buttomEmpy.addEventListener('click', () => {
 window.onload = () => {
   renderItens('computador');
   shoppingCartArray = getSavedCartItems('cartItems') || [];
-  // console.log(shoppingCartArray);
+  // console.log(shoppingCartArray);/
   renderShoppingCartItem();
   creatElementTotal();
 };
