@@ -1,7 +1,7 @@
 # **Projeto de Carrinho de Compras!**
 
 
-## O desenvolimento
+## O desenvolvimento
 
 Neste projeto foi criado  uma versão simplificada, sem persistência no banco de dados, de uma loja online, desenvolvendo em grupo suas funcionalidades de acordo com demandas definidas em um quadro Kanban.
 
